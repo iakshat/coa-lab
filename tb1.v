@@ -1,11 +1,14 @@
 /*
+
     Assignment   :  5
+    Assignment   :  4
     Problem      :  1(testbench)
     Semester     :  Autumn 2020
     Group        :  G9
     Members      :  Akshat Shukla(18CS10002)
                     Animesh Barua(18CS10003)
 */
+
 `include "74181.v"
 
 module tb();            //test bench to simulate 4 bit alu using DM74LS181
@@ -31,5 +34,34 @@ module tb();            //test bench to simulate 4 bit alu using DM74LS181
         #10 a=12;b=2;select=4'b0110;mode=0;cin=1;
 
     end
+
+
+`include "2s_compl.v"
+
+module tb();
+
+    reg clk, in, rst;
+    wire out;
+
+    twos_complement inst(.clk(clk), .bit_in(in), .bit_out(out), .rst(rst)); //instance of complement generator
+
+    initial begin
+        clk = 0;
+        $monitor("time=%0d, rst=%b, in=%b, out=%b",
+            $time, rst, in, out);
+        #10 rst = 1; in = 0;
+        #10 rst = 0; in = 0;
+        #10 in = 0;
+        #10 in = 0;
+        #10 in = 1;
+        #10 in = 1;
+        #10 in = 1;
+        #10 in = 0;
+        #10 in = 1;
+        #10 rst = 1;
+    end
+
+    always
+        #5 clk = !clk;
 
 endmodule
