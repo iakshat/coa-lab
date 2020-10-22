@@ -1,24 +1,35 @@
-`include "seq_mult_ls.v"
+/*
+    Assignment   :  4
+    Problem      :  2(testbench)
+    Semester     :  Autumn 2020
+    Group        :  G9
+    Members      :  Akshat Shukla(18CS10002)
+                    Animesh Barua(18CS10003)
+*/
+`include "mult_of_3.v"
 
-module tb();
+module tb2();
 
-    reg clk, rst, load;
-    reg [5:0] a, b;
-    wire [11:0] product;
+    reg clk, rst, bit_in;
+    wire bit_out;
 
-    unsigned_seq_mult_LS inst(clk, rst, load, a, b, product);
+    mult_of_3 inst(.bit_in(bit_in), .bit_out(bit_out), .clk(clk), .rst(rst)); //instance of multiple of 3 checker, returns 1 if divisible, 0 if not
 
     initial
     begin
         clk = 0;
-        $monitor("time=%0d, clk=%d, rst=%d, load=%d, a=%d, b=%d, product=%d", $time, clk, rst, load, a, b, product);
-
-        #10 a = 57; b = 32; rst = 1; load = 1;
-        #20 rst = 0; load = 0;
-        #200 rst = 1;
-
-        #10 $stop;
-
+        $monitor("time=%0d, rst=%d, bit_in=%b, bit_out=%b",
+            $time, rst, bit_in, bit_out);
+        #10 rst = 1;bit_in = 0;
+        #10 rst = 0;bit_in = 1;
+        #10 bit_in = 0;
+        #10 bit_in = 1;
+        #10 bit_in = 1;
+        #10 bit_in = 0;
+        #10 bit_in = 1;
+        #10 bit_in = 0;
+        #10 rst=1;
+        $stop;
     end
 
     always

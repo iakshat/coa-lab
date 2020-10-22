@@ -1,26 +1,32 @@
-`include "seq_mult_rs.v"
+/*
+    Assignment   :  4
+    Problem      :  3(testbench)
+    Semester     :  Autumn 2020
+    Group        :  G9
+    Members      :  Akshat Shukla(18CS10002)
+                    Animesh Barua(18CS10003)
+*/
+`include "seq_gcd.v"
 
 module tb();
 
-    reg clk, rst, load;
-    reg [5:0] a, b;
-    wire [11:0] product;
+    reg [7:0] a, b;
+    reg start, clk, rst;
+    wire [7:0] gcd;
+    wire done;
 
-    unsigned_seq_mult_RS inst(clk, rst, load, a, b, product);
+    control_path inst(a, b, gcd, start, done, clk, rst); //instance od sequential gcd calculator control path with a conencted datapath
 
-    initial
-    begin
+    initial begin
         clk = 0;
-        $monitor("time=%0d, clk=%d, rst=%d, load=%d, a=%d, b=%d, product=%d",$time, clk, rst, load, a, b, product);
-
-        #10 a = 19; b = 19; rst = 1; load = 1;
-        #20 load = 0;
-        #22 rst = 0;
-        #100 $stop;
-
+        $monitor("time=%0d, a=%d, b=%d, gcd=%d, start=%b, done=%b, rst=%b, state=%b",
+            $time, a, b, gcd, start, done, rst, inst.state);
+        #10 a=24;b=16;start=0;rst=1;
+        #10 rst=0;start=1;
+        #1000 $stop;
     end
 
     always
-        #5 clk = !clk;
+        #10 clk = !clk;
 
 endmodule

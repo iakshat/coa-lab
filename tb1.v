@@ -1,25 +1,37 @@
-`include "comb_mult.v"
+/*
+    Assignment   :  4
+    Problem      :  1(testbench)
+    Semester     :  Autumn 2020
+    Group        :  G9
+    Members      :  Akshat Shukla(18CS10002)
+                    Animesh Barua(18CS10003)
+*/
+`include "2s_compl.v"
 
 module tb();
 
-    reg [5:0] a, b;
-    wire [11:0] product;
+    reg clk, in, rst;
+    wire out;
 
-    unsigned_array_mult skajf(.a(a), .b(b), .product(product));
+    twos_complement inst(.clk(clk), .bit_in(in), .bit_out(out), .rst(rst)); //instance of complement generator
 
-    initial
-    begin
-        $monitor("a=%d, b=%d, product=%d", a, b, product);
-        #10 a = 6'b00001;b = 6'b00111;
-        #20 a = 63; b = 63;
-        #30 a = 12; b = 24;
-        #40 a = 6; b = 23;
-        #50 a = 49; b = 44;
-        #60 a = 33; b = 2;
-        #80 a = 19; b = 19;
-        #90 a = 60; b = 6;
+    initial begin
+        clk = 0;
+        $monitor("time=%0d, rst=%b, in=%b, out=%b",
+            $time, rst, in, out);
+        #10 rst = 1; in = 0;
+        #10 rst = 0; in = 0;
+        #10 in = 0;
+        #10 in = 0;
+        #10 in = 1;
+        #10 in = 1;
+        #10 in = 1;
+        #10 in = 0;
+        #10 in = 1;
+        #10 rst = 1;
     end
 
-
+    always
+        #5 clk = !clk;
 
 endmodule
